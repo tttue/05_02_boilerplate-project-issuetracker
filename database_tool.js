@@ -146,7 +146,52 @@ const deleteIssueTracker = (project, inputIssue, done) => {
 		}
 	});
 };
+
+
+const getIssueTracker = (project, inputSearch, done) => {
+	if (inputSearch._id) {
+		var testId = /^[0-9a-f]{24}$/
+		if (!testId.test(inputSearch._id)) {
+			done(null, { errorCode: -2, errorMsg: "_id=" + inputSearch._id + " is not valid" });
+			return;
+		}
+	}
+	if (inputSearch.open==="true"){
+		inputSearch.open = 1
+	}else if (inputSearch.open==="false") {
+		inputSearch.open = 0
+	} else {
+		inputSearch.open = undefined;
+	}
+	let searchObj = {
+		project: project,
+		_id: inputSearch._id,
+		issue_title: inputSearch.issue_title,
+		issue_text: inputSearch.issue_text,
+		created_on: inputSearch.created_on,
+		updated_on: inputSearch.updated_on,
+		created_by: inputSearch.created_by,
+		open: inputSearch.open,
+		status_text: inputSearch.status_text
+	}
+	// Remove property=undefined
+	for (let property in searchObj) {
+		if (searchObj[property]===undefined) {
+			delete searchObj[property];
+		}
+	}
+
+	console.log(searchObj);
+	IssueTracker.find(searchObj, (err, data) => {
+		if (err) {
+			done(err);
+		} else
+			done(null, { error: 0, data:data });
+		});
+};
+
 exports.IssueTrackerModel = IssueTracker;
 exports.createIssueTracker = createIssueTracker;
 exports.updateIssueTracker = updateIssueTracker;
 exports.deleteIssueTracker = deleteIssueTracker;
+exports.getIssueTracker=getIssueTracker;

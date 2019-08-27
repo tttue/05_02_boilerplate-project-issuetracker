@@ -1,5 +1,14 @@
 @link = http://localhost:3000
 ###
-DELETE {{link}}/api/issues/apitest?_id=123
+DELETE {{link}}/api/issues/apitest
 Accept:  */*
+Content-Type: application/x-www-form-urlencoded
 
+_id=5d63971dc8124c0ba8c3d8ba
+###
+GET {{link}}/api/issues/apitest
+Accept:  */*
+Content-Type: application/x-www-form-urlencoded
+
+#_id=5d63971dc8124c0ba8c3d8ba
+open=true&issue_text=qwe&_id=5d648f46cd8ec011dc53774e
