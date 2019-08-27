@@ -6,9 +6,9 @@ Content-Type: application/x-www-form-urlencoded
 
 _id=5d63971dc8124c0ba8c3d8ba
 ###
-GET {{link}}/api/issues/apitest
+GET {{link}}/api/issues/test?_id=5d649f600f83cb33dcfb87e8
 Accept:  */*
 Content-Type: application/x-www-form-urlencoded
 
-#_id=5d63971dc8124c0ba8c3d8ba
-open=true&issue_text=qwe&_id=5d648f46cd8ec011dc53774e
+#_id=5d63a04b05574d1be0d36659
+#open=true&issue_text=qwe&_id=5d648f46cd8ec011dc53774e

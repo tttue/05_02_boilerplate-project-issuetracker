@@ -22,17 +22,15 @@ module.exports = function (app) {
 
 		.get(function (req, res) {
 			var project = req.params.project;
-			console.log(req.body);
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
-			database_tool.getIssueTracker(project, req.body,(err, info)=>{
+			database_tool.getIssueTracker(project, req.query, (err, info) => {
 				clearTimeout(t);
 				err ? next(err) : res.json(info);
 			})
 		})
 
-		.post(function (req, res,next) {
+		.post(function (req, res, next) {
 			var project = req.params.project;
-			console.log(req.body);
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.createIssueTracker(project, req.body, (err, info) => {
 				clearTimeout(t);
@@ -40,9 +38,8 @@ module.exports = function (app) {
 			});
 		})
 
-		.put(function (req, res,next) {
+		.put(function (req, res, next) {
 			var project = req.params.project;
-			console.log(req.body);
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.updateIssueTracker(project, req.body, (err, info) => {
 				clearTimeout(t);
@@ -53,7 +50,6 @@ module.exports = function (app) {
 
 		.delete(function (req, res) {
 			var project = req.params.project;
-			console.log(req.body);
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.deleteIssueTracker(project, req.body, (err, info) => {
 				clearTimeout(t);

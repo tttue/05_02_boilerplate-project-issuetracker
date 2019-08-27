@@ -12,6 +12,7 @@ const issueTrackerSchema = new mongoose.Schema({
 	created_on: Date,
 	updated_on: Date,
 	created_by: String,
+	assigned_to: String,
 	open: Number,
 	status_text: String
 });
@@ -46,6 +47,7 @@ const createIssueTracker = (project, inputIssue, done) => {
 		created_on: inputIssue.created_on ? inputIssue.created_on : new Date(),
 		updated_on: inputIssue.updated_on ? inputIssue.updated_on : new Date(),
 		created_by: inputIssue.created_by,
+		assigned_to: inputIssue.assigned_to,
 		open: 1,
 		status_text: inputIssue.status_text
 	}
@@ -142,7 +144,7 @@ const deleteIssueTracker = (project, inputIssue, done) => {
 		} else if (project !== dataIssue.project) {
 			done(err, { errorCode: -1, errorMsg: "Project of Issue id_=" + inputIssue._id + " is not match" });
 		} else {
-			IssueTracker.deleteOne({ _id: dataIssue._id }, (err) => err ? done(null, { error: -1, text: 'could not delete ' + inputIssue._id }) : done(null, { error: 0, text: "deleted " + inputIssue._id }));
+			IssueTracker.deleteOne({ _id: dataIssue._id }, (err) => err ? done(null, { errorCode: -1, text: 'could not delete ' + inputIssue._id }) : done(null, { errorCode: 0, text: "deleted " + inputIssue._id }));
 		}
 	});
 };
@@ -156,9 +158,9 @@ const getIssueTracker = (project, inputSearch, done) => {
 			return;
 		}
 	}
-	if (inputSearch.open==="true"){
+	if (inputSearch.open === "true") {
 		inputSearch.open = 1
-	}else if (inputSearch.open==="false") {
+	} else if (inputSearch.open === "false") {
 		inputSearch.open = 0
 	} else {
 		inputSearch.open = undefined;
@@ -171,27 +173,26 @@ const getIssueTracker = (project, inputSearch, done) => {
 		created_on: inputSearch.created_on,
 		updated_on: inputSearch.updated_on,
 		created_by: inputSearch.created_by,
+		assigned_to: inputSearch.assigned_to,
 		open: inputSearch.open,
 		status_text: inputSearch.status_text
 	}
 	// Remove property=undefined
 	for (let property in searchObj) {
-		if (searchObj[property]===undefined) {
+		if (searchObj[property] === undefined) {
 			delete searchObj[property];
 		}
 	}
-
-	console.log(searchObj);
 	IssueTracker.find(searchObj, (err, data) => {
 		if (err) {
 			done(err);
 		} else
-			done(null, { error: 0, data:data });
-		});
+			done(null, { errorCode: 0, data: data });
+	});
 };
 
 exports.IssueTrackerModel = IssueTracker;
 exports.createIssueTracker = createIssueTracker;
 exports.updateIssueTracker = updateIssueTracker;
 exports.deleteIssueTracker = deleteIssueTracker;
-exports.getIssueTracker=getIssueTracker;
+exports.getIssueTracker = getIssueTracker;
