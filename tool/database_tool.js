@@ -26,21 +26,15 @@ issueTrackerSchema.index({ open: 1 });
 const IssueTracker = mongoose.model('IssueTracker', issueTrackerSchema);
 
 const createIssueTracker = (project, inputIssue, done) => {
-	var checkResult = tool.checkStringNotBlank(inputIssue.issue_title, "issue_title", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
+	let checkParamList = [
+		{ param: inputIssue.issue_title, checkFunc: tool.checkStringNotBlank, paramName: "issue_title" },
+		{ param: inputIssue.issue_text, checkFunc: tool.checkStringNotBlank, paramName: "issue_text" },
+		{ param: inputIssue.created_by, checkFunc: tool.checkStringNotBlank, paramName: "created_by" }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
-	var checkResult = tool.checkStringNotBlank(inputIssue.issue_text, "issue_text", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
-	}
-	var checkResult = tool.checkStringNotBlank(inputIssue.created_by, "created_by", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
-	}
+
 	let objIssueTracker = {
 		project: project,
 		issue_title: inputIssue.issue_title,
@@ -65,15 +59,11 @@ const createIssueTracker = (project, inputIssue, done) => {
 
 
 const updateIssueTracker = (project, inputIssue, done) => {
-	var checkResult = tool.checkStringNotBlank(inputIssue._id, "_id", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
-	}
-	var testId = /^[0-9a-f]{24}$/
-	if (!testId.test(inputIssue._id)) {
-		done(null, { errorCode: -2, errorMsg: "_id=" + inputIssue._id + " is not valid" });
-		return;
+	let checkParamList = [
+		{ param: inputIssue._id, checkFunc: tool.checkId, paramName: "_id", isNotBlank: true }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
 
 	IssueTracker.findById({ _id: inputIssue._id }, (err, dataIssue) => {
@@ -126,16 +116,13 @@ const updateIssueTracker = (project, inputIssue, done) => {
 
 
 const deleteIssueTracker = (project, inputIssue, done) => {
-	var checkResult = tool.checkStringNotBlank(inputIssue._id, "_id", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
+	let checkParamList = [
+		{ param: inputIssue._id, checkFunc: tool.checkId, paramName: "_id", isNotBlank: true }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
-	var testId = /^[0-9a-f]{24}$/
-	if (!testId.test(inputIssue._id)) {
-		done(null, { errorCode: -2, errorMsg: "_id=" + inputIssue._id + " is not valid" });
-		return;
-	}
+
 
 	IssueTracker.findById({ _id: inputIssue._id }, (err, dataIssue) => {
 		if (err) {
@@ -152,13 +139,13 @@ const deleteIssueTracker = (project, inputIssue, done) => {
 
 
 const getIssueTracker = (project, inputSearch, done) => {
-	if (inputSearch._id) {
-		var testId = /^[0-9a-f]{24}$/
-		if (!testId.test(inputSearch._id)) {
-			done(null, { errorCode: -2, errorMsg: "_id=" + inputSearch._id + " is not valid" });
-			return;
-		}
+	let checkParamList = [
+		{ param: inputSearch._id, checkFunc: tool.checkId, paramName: "_id"}
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
+
 	if (inputSearch.open === "true") {
 		inputSearch.open = 1
 	} else if (inputSearch.open === "false") {

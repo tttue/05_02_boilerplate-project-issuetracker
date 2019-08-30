@@ -10,7 +10,7 @@
 
 var expect = require('chai').expect;
 const bodyParser = require('body-parser')
-const database_tool = require("../database_tool");
+const database_tool = require("../tool/database_tool");
 
 const timeout = 10000;
 

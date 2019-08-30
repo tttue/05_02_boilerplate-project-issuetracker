@@ -90,7 +90,7 @@ suite('Functional Tests', function () {
 					.end(function (err, res) {
 						assert.equal(res.status, 200);
 
-						assert.equal(res.body.errorCode, -2);
+						assert.equal(res.body.errorCode, -1);
 						assert.equal(res.body.errorMsg, elm + " must be not blank");
 
 					});
@@ -110,7 +110,7 @@ suite('Functional Tests', function () {
 				.end(function (err, res) {
 					assert.equal(res.status, 200);
 
-					assert.equal(res.body.errorCode, -2);
+					assert.equal(res.body.errorCode, -1);
 					assert.equal(res.body.errorMsg, "_id must be not blank");
 					done();
 
@@ -258,8 +258,8 @@ suite('Functional Tests', function () {
 		test('Multiple filters (test for multiple fields you know will be in the db for a return)', function (done) {
 			this.timeout(5000);
 			chai.request(server)
-				.get('/api/issues/apitest')
-				.query({ created_by: "qwe", open: "true" })
+				.get('/api/issues/test')
+				.query({ issue_title:"1432Test_Title",issue_text: '1432Test_text'})
 				.end(function (err, res) {
 					assert.equal(res.status, 200);
 					assert.equal(res.body.errorCode, 0);
@@ -293,7 +293,7 @@ suite('Functional Tests', function () {
 				.end(function (err, res) {
 					assert.equal(res.status, 200);
 
-					assert.equal(res.body.errorCode, -2);
+					assert.equal(res.body.errorCode, -1);
 					assert.equal(res.body.errorMsg, "_id must be not blank");
 					done();
 
