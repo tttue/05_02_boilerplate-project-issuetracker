@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: path.resolve(process.cwd(), 'private.env') });
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+mongoose.set('useCreateIndex', true);
 const tool = require("./tool")
 
 const issueTrackerSchema = new mongoose.Schema({
